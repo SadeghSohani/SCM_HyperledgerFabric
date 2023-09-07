@@ -1,0 +1,928 @@
+{
+	"info": {
+		"_postman_id": "64b29377-73f2-4a33-a75f-b01681dc1732",
+		"name": "Fabric Network API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11357832"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"Org1@username\",\n\t\"orgName\": \"Org1\",\n    \"password\": \"12345678\"\n}\t"
+				},
+				"url": {
+					"raw": "http://localhost:4000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register & Get Secret",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"raj111\",\n\t\"orgName\": \"Org1\"\n}\t"
+				},
+				"url": {
+					"raw": "http://192.168.0.109:4000/register",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"0",
+						"109"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"pulkit\",\n\t\"orgName\": \"Org1\"\n}\t"
+				},
+				"url": {
+					"raw": "http://localhost:4000/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Chicken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTQyMzAsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc4MjMwfQ.d8HkpU_DG1LYL-K18PJoXl31mQj7o7Z9HD-gNYZivqA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzY5MDA5MTMsInVzZXJuYW1lIjoicGF2YW4iLCJvcmdOYW1lIjoiT3JnMSIsImlhdCI6MTU3Njg2NDkxM30.3T8fgkzz4rey-ioIPXu3-Ou9jZa8RLOgUN4OW1SsYP4",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"birthday\": \"1401/5/25\",\n    \"breed\": \"Ross\",\n    \"price\": \"10\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Chicken Ownership",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA3MzUyODIsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNjk5MjgyfQ.JH604n6ovOSJ-CS27JK6FbHokpEi5pfCBIH4yOPqwhU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"chickenId\": \"06f9afdf-c491-466b-bb4b-972c53a34e7b\",\n    \"newOwner\": \"SALAR\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken/owner/change",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken",
+						"owner",
+						"change"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get History Of Chicken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA3MzUyODIsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNjk5MjgyfQ.JH604n6ovOSJ-CS27JK6FbHokpEi5pfCBIH4yOPqwhU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/asset/history?chickenId=06f9afdf-c491-466b-bb4b-972c53a34e7b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"asset",
+						"history"
+					],
+					"query": [
+						{
+							"key": "chickenId",
+							"value": "06f9afdf-c491-466b-bb4b-972c53a34e7b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Chickens by owner",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA3MzQyMjQsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNjk4MjI0fQ.PBewkoMC2KAdert5EK9KmCR7X5I-1qbiYwZmcUmBFhM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chickens/owner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chickens",
+						"owner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Orgs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA0Mjk5MzQsInVzZXJuYW1lIjoiU2FkZWdoIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE2NjAzOTM5MzR9.lqI3JLiExxA2zEqE7VlCf-1cwTeCCEFPxSMR8nf9aAo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"usernames\": [\"Org1\", \"Org2\"],\n    \"passwords\": [\"12345678\",\"12345678\"],\n    \"roles\": [\"MotherCompany\",\"FarmCompany\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/organizations/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"organizations",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orgs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA0MzE5MTQsInVzZXJuYW1lIjoiU2FkZWdoIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE2NjAzOTU5MTR9.dAD7kXt_LLlgd-0Wf1GDcPUBvDwKBueBbjICRtnDP9g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/organizations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"organizations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create database",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA0MzI2ODQsInVzZXJuYW1lIjoiU2FkZWdoIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE2NjAzOTY2ODR9.yIXErsqxkNEh96T7nkDd8Q3f3HsyO_4jUQP1SIVzJCU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\" : \n    \"CREATE TABLE organizations (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), role VARCHAR(255))\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/database/query",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"database",
+						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Drop table",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA0MzI2ODQsInVzZXJuYW1lIjoiU2FkZWdoIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE2NjAzOTY2ODR9.yIXErsqxkNEh96T7nkDd8Q3f3HsyO_4jUQP1SIVzJCU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\" : \"DROP TABLE organizations\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/database/query",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"database",
+						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get chicken by chickenId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA3MjczODIsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNjkxMzgyfQ.QQLjYM3nmRB4okxrekVUSeIuq-iq4YYH9p0lzlH9C8s",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken?chickenId=CHICKEN0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken"
+					],
+					"query": [
+						{
+							"key": "chickenId",
+							"value": "CHICKEN0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all chickens in ledger",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA3Mjk1MTcsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNjkzNTE3fQ.S9IpPb7GXJ346m82E4dSUR-ja8OD7Bni1zDM-oFuTQs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chickens/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chickens",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buy token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MDI3MjAsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzY2NzIwfQ.cqAB4AsSPAtvFTgz0Ql8qG2rFBdm2Y5gIJbEToN9rlw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": \"2.3526\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/token/buy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"token",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set chicken public for sale",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MDQ3MDUsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzY4NzA1fQ.bOOrN8eZSGLfet6ReQPawSqWYBCphyJHEwCjLVEibtc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"assetId\": \"03dfe023-7181-4e42-9b9f-bff205e3c1ea\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken/public",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken",
+						"public"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MDY1NTUsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzcwNTU1fQ._OUJuS2GUzAhyvVj3x5MqjyouEtUR2dQTGjA5dQ67ik",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": \"1\",\n    \"receiver\": \"Sadegh\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/token/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"token",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MDc4NzksInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzcxODc5fQ.x6WohumGIL1HnMykvZc7Q2TUXaETMUxyzbAZjjNx18o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bids for asset",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MDg5MjQsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzcyOTI0fQ.TdrijW2ZQJjqKhdz7fcTyAxOncg9X8p_cqoeb_bLayo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/asset/bids?assetId=03dfe023-7181-4e42-9b9f-bff205e3c1ea",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"asset",
+						"bids"
+					],
+					"query": [
+						{
+							"key": "assetId",
+							"value": "03dfe023-7181-4e42-9b9f-bff205e3c1ea"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bid for asset",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTA0MTUsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc0NDE1fQ.a-TYWBmXYbY7HZn2PYSamVXPC5JlNGhcsHWpDlztUok",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"assetId\": \"03dfe023-7181-4e42-9b9f-bff205e3c1ea\",\n    \"assetOwner\": \"Org1@username\",\n    \"price\": \"0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/asset/bid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"asset",
+						"bid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sell chicken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTE2NDcsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc1NjQ3fQ.qhT_quKtjVazEpgV6l8Uhu_qR5J6xx62270k5WRDLXQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"03dfe023-7181-4e42-9b9f-bff205e3c1ea\",\n    \"customer\": \"Org2@username\",\n    \"price\": \"12\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken/sell",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken",
+						"sell"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set chicken price",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTQ4MTMsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc4ODEzfQ.wx2t7Jg9EYqWDyDDbIZVdQoK7DKJrwVIybndEcTWwMw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"price\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chicken/price",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chicken",
+						"price"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put growth information",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTQ4MTMsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc4ODEzfQ.wx2t7Jg9EYqWDyDDbIZVdQoK7DKJrwVIybndEcTWwMw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"key\": \"\",\n    \"value\": \"\",\n    \"instruction\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/information/growth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"information",
+						"growth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get public assets",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTQ4MTMsInVzZXJuYW1lIjoiT3JnMUB1c2VybmFtZSIsIm9yZ05hbWUiOiJPcmcxIiwiaWF0IjoxNjYwNzc4ODEzfQ.wx2t7Jg9EYqWDyDDbIZVdQoK7DKJrwVIybndEcTWwMw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/channels/mychannel/chaincodes/broilerChickenCC/chickens/public",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"channels",
+						"mychannel",
+						"chaincodes",
+						"broilerChickenCC",
+						"chickens",
+						"public"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODUyMzE1ODgsInVzZXJuYW1lIjoicGF2YW4xIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE1ODUxOTU1ODh9.yfxyVPQWH_eKPKY51sUsB5slOW9XNrOwmU0g_5aAuhQ",
+			"type": "string"
+		}
+	]
+}
