@@ -591,6 +591,64 @@ func (s *SmartContract) PutAttribute(ctx contractapi.TransactionContextInterface
 
 }
 
+func (s *SmartContract) PutTemperature(ctx contractapi.TransactionContextInterface,
+	id string, temperature float64) (*Asset, error) {
+	asset, err := s.QueryAsset(ctx, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	value := fmt.Sprintf("%f", temperature)
+	attrs := asset.Attrs
+	attrs = append(attrs, Attribute{Key: "Temperature", Value: value, Instruction: ""})
+	if temperature < 0 || temperature > 25 {
+		attrs = append(attrs, Attribute{Key: "Alert", Value: "True", Instruction: ""})
+	}
+	asset.Attrs = attrs
+	asset.TxType = "PutAttr"
+
+	assetAsBytes, _ := json.Marshal(asset)
+
+	_err := ctx.GetStub().PutState(id, assetAsBytes)
+
+	if _err != nil {
+		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
+	}
+
+	return asset, nil
+
+}
+
+func (s *SmartContract) PutHumidity(ctx contractapi.TransactionContextInterface,
+	id string, humidity float64) (*Asset, error) {
+	asset, err := s.QueryAsset(ctx, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	value := fmt.Sprintf("%f", humidity)
+	attrs := asset.Attrs
+	attrs = append(attrs, Attribute{Key: "Humidity", Value: value, Instruction: ""})
+	if humidity < 0.2 || humidity > 0.6 {
+		attrs = append(attrs, Attribute{Key: "Alert", Value: "True", Instruction: ""})
+	}
+	asset.Attrs = attrs
+	asset.TxType = "PutAttr"
+
+	assetAsBytes, _ := json.Marshal(asset)
+
+	_err := ctx.GetStub().PutState(id, assetAsBytes)
+
+	if _err != nil {
+		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
+	}
+
+	return asset, nil
+
+}
+
 func (s *SmartContract) PutAttributeForAssetsInBatch(ctx contractapi.TransactionContextInterface,
 	batchId string, key string, value string, instruction string, owner string) ([]Asset, error) {
 
