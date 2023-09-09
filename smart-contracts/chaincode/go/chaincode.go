@@ -30,6 +30,9 @@ type Asset struct {
 	Parent       string      `json:"parent"`
 	Owner        string      `json:"owner"`
 	Attrs        []Attribute `json:"attrs"`
+	Temperature  int         `json:"temperature"`
+	Humidity     float64     `json:"humidity"`
+	Alert        bool        `json:"alert"`
 	ForSale      bool        `json:"forSale"`
 	TxType       string      `json:"txType"`
 	ChildesCount int         `json:"childesCount"`
@@ -62,7 +65,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 
 	attrs := []Attribute{}
 
-	asset := Asset{Id: id, SerialNumber: "BC" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: owner, Owner: owner, Attrs: attrs, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
+	asset := Asset{Id: id, SerialNumber: "BC" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: owner, Owner: owner, Attrs: attrs, Temperature: -1, Humidity: 1.1, Alert: false, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
 
 	assetAsBytes, _ := json.Marshal(asset)
 	err := ctx.GetStub().PutState(id, assetAsBytes)
@@ -85,7 +88,7 @@ func (s *SmartContract) CreateBulkAssets(ctx contractapi.TransactionContextInter
 	result := []Asset{}
 
 	for i := range ids {
-		asset := Asset{Id: ids[i], SerialNumber: "CH" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: owner, Owner: owner, Attrs: attrs, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
+		asset := Asset{Id: ids[i], SerialNumber: "AS" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: owner, Owner: owner, Attrs: attrs, Temperature: -1, Humidity: 1.1, Alert: false, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
 		assetAsBytes, _ := json.Marshal(asset)
 		err := ctx.GetStub().PutState(ids[i], assetAsBytes)
 
@@ -107,7 +110,7 @@ func (s *SmartContract) CreateBulkAssetsInBatch(ctx contractapi.TransactionConte
 	ids := strings.Split(assetsIds, "#")
 
 	attrs := []Attribute{}
-	batch := Asset{Id: batchId, SerialNumber: "BC" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: "Batch", Tag: tag, Status: "", Price: 0.0, Parent: owner, Owner: owner, Attrs: attrs, ForSale: false, TxType: "CreateBatch", ChildesCount: len(ids), Buyer: "", LocalDC: "", GlobalDC: ""}
+	batch := Asset{Id: batchId, SerialNumber: "BC" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: "Batch", Tag: tag, Status: "", Price: 0.0, Parent: owner, Owner: owner, Attrs: attrs, Temperature: -1, Humidity: 1.1, Alert: false, ForSale: false, TxType: "CreateBatch", ChildesCount: len(ids), Buyer: "", LocalDC: "", GlobalDC: ""}
 
 	batchAsBytes, _ := json.Marshal(batch)
 	err := ctx.GetStub().PutState(batchId, batchAsBytes)
@@ -117,7 +120,7 @@ func (s *SmartContract) CreateBulkAssetsInBatch(ctx contractapi.TransactionConte
 	}
 
 	for i := range ids {
-		asset := Asset{Id: ids[i], SerialNumber: "CH" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: batchId, Owner: owner, Attrs: attrs, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
+		asset := Asset{Id: ids[i], SerialNumber: "CH" + strconv.Itoa(rand.Intn(99999999-10000000)+10000000), Type: assetType, Tag: tag, Status: status, Price: price, Parent: batchId, Owner: owner, Attrs: attrs, Temperature: -1, Humidity: 1.1, Alert: false, ForSale: false, TxType: "CreateAsset", ChildesCount: 0, Buyer: "", LocalDC: "", GlobalDC: ""}
 		assetAsBytes, _ := json.Marshal(asset)
 		err := ctx.GetStub().PutState(ids[i], assetAsBytes)
 
@@ -592,21 +595,18 @@ func (s *SmartContract) PutAttribute(ctx contractapi.TransactionContextInterface
 }
 
 func (s *SmartContract) PutTemperature(ctx contractapi.TransactionContextInterface,
-	id string, temperature float64) (*Asset, error) {
+	id string, temperature int) (*Asset, error) {
 	asset, err := s.QueryAsset(ctx, id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	value := fmt.Sprintf("%f", temperature)
-	attrs := asset.Attrs
-	attrs = append(attrs, Attribute{Key: "Temperature", Value: value, Instruction: ""})
+	asset.Temperature = temperature
 	if temperature < 0 || temperature > 25 {
-		attrs = append(attrs, Attribute{Key: "Alert", Value: "True", Instruction: ""})
+		asset.Alert = true
 	}
-	asset.Attrs = attrs
-	asset.TxType = "PutAttr"
+	asset.TxType = "PutTemperature"
 
 	assetAsBytes, _ := json.Marshal(asset)
 
@@ -628,14 +628,11 @@ func (s *SmartContract) PutHumidity(ctx contractapi.TransactionContextInterface,
 		return nil, err
 	}
 
-	value := fmt.Sprintf("%f", humidity)
-	attrs := asset.Attrs
-	attrs = append(attrs, Attribute{Key: "Humidity", Value: value, Instruction: ""})
+	asset.Humidity = humidity
 	if humidity < 0.2 || humidity > 0.6 {
-		attrs = append(attrs, Attribute{Key: "Alert", Value: "True", Instruction: ""})
+		asset.Alert = true
 	}
-	asset.Attrs = attrs
-	asset.TxType = "PutAttr"
+	asset.TxType = "PutHumidity"
 
 	assetAsBytes, _ := json.Marshal(asset)
 
@@ -948,7 +945,7 @@ func (s *SmartContract) TakeDelivery(ctx contractapi.TransactionContextInterface
 		asset.Owner = buyer
 		asset.Parent = buyer
 		asset.TxType = "TakeDelivery"
-//		asset.Status = "Delivered"
+		//		asset.Status = "Delivered"
 		asset.Price = 0.0
 		asset.Buyer = ""
 	}
