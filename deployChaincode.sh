@@ -50,7 +50,7 @@ setGlobalsForPeer1Org2() {
 # This function will download all dependencies
 presetup() {
     echo Vendoring Go dependencies ...
-    pushd ./smart-contracts/broilerChickenCC/go
+    pushd ./smart-contracts/chaincode/go
     GO111MODULE=on go mod vendor
     popd
     echo Finished vendoring Go dependencies

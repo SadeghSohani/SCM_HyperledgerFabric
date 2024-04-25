@@ -457,6 +457,71 @@ const putTemperature = async (channelName, chaincodeName, username, org_name, id
     }
 }
 
+const setAlert = async (channelName, chaincodeName, username, org_name, id, alert) => {
+    try {
+        
+        logger.debug(util.format('\n============ invoke transaction on channel %s ============\n', channelName));
+        
+        const ccp = await helper.getCCP(org_name) 
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = await helper.getWalletPath(org_name) //path.join(process.cwd(), 'wallet');
+        const wallet = await Wallets.newFileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        let identity = await wallet.get(username);
+        if (!identity) {
+            console.log(`An identity for the user ${username} does not exist in the wallet, so registering user`);
+            await helper.getRegisteredUser(username, org_name, true)
+            identity = await wallet.get(username);
+            console.log('Run the registerUser.js application before retrying');
+            return;
+        }
+
+        const connectOptions = {
+            wallet, identity: username, discovery: { enabled: true, asLocalhost: true },
+            eventHandlerOptions: {
+                commitTimeout: 100,
+                strategy: DefaultEventHandlerStrategies.NETWORK_SCOPE_ALLFORTX
+            }
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, connectOptions);
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork(channelName);
+
+        const contract = network.getContract(chaincodeName);
+
+        let result
+        let message;
+
+        result = await contract.submitTransaction("SetAlert", id, alert);
+        message = `Transaction successful.`
+
+        await gateway.disconnect();
+
+        result = JSON.parse(result.toString());
+
+        let response = {
+            message: message,
+            body: result
+        }
+
+        return response;
+
+
+    } catch (error) {
+
+        console.log(`Getting error: ${error}`)
+        return error.message
+
+    }
+}
+
 const putHumidity = async (channelName, chaincodeName, username, org_name, id, humidity) => {
     try {
         
@@ -1540,3 +1605,4 @@ exports.createBulkAssetsInBatch = createBulkAssetsInBatch;
 exports.takeDelivery = takeDelivery;
 exports.putHumidity = putHumidity;
 exports.putTemperature = putTemperature;
+exports.setAlert = setAlert;

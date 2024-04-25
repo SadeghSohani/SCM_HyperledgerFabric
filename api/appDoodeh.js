@@ -1086,6 +1086,72 @@ app.post('/channels/:channelName/chaincodes/:chaincodeName/temp/put', async func
     }
 });
 
+app.post('/channels/:channelName/chaincodes/:chaincodeName/alert/set', async function (req, res) {
+
+
+    try {
+        logger.debug('==================== INVOKE ON CHAINCODE ==================');
+        const chaincodeName = req.params.chaincodeName;
+        const channelName = req.params.channelName;
+        const id = req.body.id;
+        const alert = req.body.alert;
+
+        logger.debug('channelName  : ' + channelName);
+        logger.debug('chaincodeName : ' + chaincodeName);
+        logger.debug('id  : ' + id);
+        logger.debug('alert  : ' + alert);
+        if (!chaincodeName) {
+            res.json(getErrorMessage('\'chaincodeName\''));
+            return;
+        }
+        if (!channelName) {
+            res.json(getErrorMessage('\'channelName\''));
+            return;
+        }
+        if (!id) {
+            res.json(getErrorMessage('\'id\''));
+            return;
+        }
+        // if (!alert) {
+        //     res.json(getErrorMessage('\'alert\''));
+        //     return;
+        // }
+
+        // uuid validation.
+        const validate = validator.default.isUUID(id, 4)
+        if (!validate) {
+            logger.debug("id is invalid");
+            res.send(
+                {
+                    "success": false,
+                    "error": {
+                        "status": 400,
+                        "message": "Invalid uuid."
+                    }
+                }
+            )
+        }
+
+        let message = await invoke.setAlert(channelName, chaincodeName, req.username, req.orgname, id, alert);
+        console.log(`message result is : ${message}`)
+
+        const response_payload = {
+            result: message,
+            error: null,
+            errorData: null
+        }
+        res.send(response_payload);
+
+    } catch (error) {
+        const response_payload = {
+            result: null,
+            error: error.name,
+            errorData: error.message
+        }
+        res.send(response_payload)
+    }
+});
+
 app.post('/channels/:channelName/chaincodes/:chaincodeName/humidity/put', async function (req, res) {
 
 

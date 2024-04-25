@@ -55,6 +55,334 @@ type Token struct {
 	BlockAmount float64 `json:"blockAmount"`
 }
 
+
+
+
+
+
+
+
+
+
+// Mah Project %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+type LocalScores struct {
+	Node            int  `json:"Node"`
+	MovieID         int  `json:"MovieID"`
+	LocalScore      int  `json:"LocalScore"`
+}
+type GlobalScores struct {
+	MovieID         int  `json:"MovieID"`
+	GlobalScore     int  `json:"GlobalScore"`
+}
+type MachineWeight struct {
+	Node            int  `json:"Node"`
+	MovieCategory   int  `json:"MovieCategory"`
+	Weight          int  `json:"Weight"`
+}
+type NumOfTrans struct {
+	Node            int  `json:"Node"`
+	MovieID         int  `json:"MovieID"`
+	Number          int  `json:"Number"`
+}
+func (s *SmartContract) CreateAssetLocalScore(ctx contractapi.TransactionContextInterface, node int, movieid int, localscore int) error {
+	key := "Local" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	exists, err := s.AssetExistsLocalScore(ctx, node, movieid)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the asset %s already exists", key)
+	}
+
+	assetLocal := LocalScores{
+		Node:            node,
+		MovieID:         movieid,
+		LocalScore:      localscore,
+
+	}
+	assetJSON, err := json.Marshal(assetLocal)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(key, assetJSON)
+}
+func (s *SmartContract) ReadAssetLocalScore(ctx contractapi.TransactionContextInterface, node int, movieid int) (*LocalScores, error) {
+	key := "Local" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if assetJSON == nil {
+		return nil, fmt.Errorf("the asset %s does not exist", key)
+	}
+
+	var assetLocal LocalScores
+	err = json.Unmarshal(assetJSON, &assetLocal)
+	if err != nil {
+		return nil, err
+	}
+
+	return &assetLocal, nil
+}
+func (s *SmartContract) AssetExistsLocalScore(ctx contractapi.TransactionContextInterface, node int, movieid int) (bool, error) {
+	key := "Local" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+
+	return assetJSON != nil, nil
+}
+func (s *SmartContract) TransferAssetLocalScore(ctx contractapi.TransactionContextInterface, node int, movieid int, newLocalscore int) (int, error) {
+	key := "Local" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetLocal, err := s.ReadAssetLocalScore(ctx, node, movieid)
+	if err != nil {
+		return 0, err
+	}
+
+	oldscore := assetLocal.LocalScore
+	assetLocal.LocalScore = newLocalscore
+
+	assetJSON, err := json.Marshal(assetLocal)
+	if err != nil {
+		return 0, err
+	}
+
+	err = ctx.GetStub().PutState(key, assetJSON)
+	if err != nil {
+		return 0, err
+	}
+
+	return oldscore, nil
+}
+func (s *SmartContract) CreateAssetGlobalScore(ctx contractapi.TransactionContextInterface, movieid int, globalscore int) error {
+	key := "Global" + strconv.Itoa(movieid)
+	exists, err := s.AssetExistsGlobalScore(ctx, movieid)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the asset %s already exists", key)
+	}
+
+	assetGlobal := GlobalScores{
+		MovieID:         movieid,
+		GlobalScore:     globalscore,
+
+	}
+	assetJSON, err := json.Marshal(assetGlobal)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(key, assetJSON)
+}
+func (s *SmartContract) ReadAssetGlobalScore(ctx contractapi.TransactionContextInterface, movieid int) (*GlobalScores, error) {
+	key := "Global" + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if assetJSON == nil {
+		return nil, fmt.Errorf("the asset %s does not exist", key)
+	}
+
+	var assetGlobal GlobalScores
+	err = json.Unmarshal(assetJSON, &assetGlobal)
+	if err != nil {
+		return nil, err
+	}
+
+	return &assetGlobal, nil
+}
+func (s *SmartContract) AssetExistsGlobalScore(ctx contractapi.TransactionContextInterface, movieid int) (bool, error) {
+	key := "Global" + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+
+	return assetJSON != nil, nil
+}
+func (s *SmartContract) TransferAssetGlobalScore(ctx contractapi.TransactionContextInterface, movieid int, newGlobalscore int) (int, error) {
+	key := "Global" + strconv.Itoa(movieid)
+	assetGlobal, err := s.ReadAssetGlobalScore(ctx, movieid)
+	if err != nil {
+		return 0 , err
+	}
+
+	oldscore := assetGlobal.GlobalScore
+	assetGlobal.GlobalScore = newGlobalscore
+
+	assetJSON, err := json.Marshal(assetGlobal)
+	if err != nil {
+		return 0, err
+	}
+
+	err = ctx.GetStub().PutState(key, assetJSON)
+	if err != nil {
+		return 0, err
+	}
+
+	return oldscore, nil
+}
+func (s *SmartContract) CreateAssetMachineWeight(ctx contractapi.TransactionContextInterface, node int, moviecategory int, weight int) error {
+	key := "Weight" + strconv.Itoa(node) + "." + strconv.Itoa(moviecategory)
+	exists, err := s.AssetExistsMachineWeight(ctx, node, moviecategory)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the asset %s already exists", key)
+	}
+
+	assetWeight := MachineWeight{
+		Node:               node,
+		MovieCategory:      moviecategory,
+		Weight:             weight,
+
+	}
+	assetJSON, err := json.Marshal(assetWeight)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(key, assetJSON)
+}
+func (s *SmartContract) ReadAssetMachineWeight(ctx contractapi.TransactionContextInterface, node int, moviecategory int) (*MachineWeight, error) {
+	key := "Weight" + strconv.Itoa(node) + "." + strconv.Itoa(moviecategory)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if assetJSON == nil {
+		return nil, fmt.Errorf("the asset %s does not exist", key)
+	}
+
+	var assetWeight MachineWeight
+	err = json.Unmarshal(assetJSON, &assetWeight)
+	if err != nil {
+		return nil, err
+	}
+
+	return &assetWeight, nil
+}
+func (s *SmartContract) AssetExistsMachineWeight(ctx contractapi.TransactionContextInterface, node int, moviecategory int) (bool, error) {
+	key := "Weight" + strconv.Itoa(node) + "." + strconv.Itoa(moviecategory)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+
+	return assetJSON != nil, nil
+}
+func (s *SmartContract) TransferAssetMachineWeight(ctx contractapi.TransactionContextInterface, node int, moviecategory int, newWeight int) (int, error) {
+	key := "Weight" + strconv.Itoa(node) + "." + strconv.Itoa(moviecategory)
+	assetWeight ,err := s.ReadAssetMachineWeight(ctx, node,moviecategory)
+	if err != nil {
+		return 0, err
+	}
+
+	oldweight := assetWeight.Weight
+	assetWeight.Weight = newWeight
+
+	assetJSON, err := json.Marshal(assetWeight)
+	if err != nil {
+		return 0, err
+	}
+
+	err = ctx.GetStub().PutState(key, assetJSON)
+	if err != nil {
+		return 0, err
+	}
+
+	return oldweight, nil
+}
+func (s *SmartContract) CreateAssetNumOfTrans(ctx contractapi.TransactionContextInterface, node int, movieid int, number int) error {
+	key := "Number" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	exists, err := s.AssetExistsNumOfTrans(ctx, node, movieid)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the asset %s already exists", key)
+	}
+
+	assetNumOfTrans := NumOfTrans{
+		Node:            node,
+		MovieID:         movieid,
+		Number:          number,
+
+	}
+	assetJSON, err := json.Marshal(assetNumOfTrans)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(key, assetJSON)
+}
+func (s *SmartContract) ReadAssetNumOfTrans(ctx contractapi.TransactionContextInterface, node int, movieid int) (*NumOfTrans, error) {
+	key := "Number" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if assetJSON == nil {
+		return nil, fmt.Errorf("the asset %s does not exist", key)
+	}
+
+	var assetNumOfTrans NumOfTrans
+	err = json.Unmarshal(assetJSON, &assetNumOfTrans)
+	if err != nil {
+		return nil, err
+	}
+
+	return &assetNumOfTrans, nil
+}
+func (s *SmartContract) AssetExistsNumOfTrans(ctx contractapi.TransactionContextInterface, node int, movieid int) (bool, error) {
+	key := "Number" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+
+	return assetJSON != nil, nil
+}
+func (s *SmartContract) TransferAssetNumOfTrans(ctx contractapi.TransactionContextInterface, node int, movieid int, newNumber int) (int, error) {
+	key := "Number" + strconv.Itoa(node) + "." + strconv.Itoa(movieid)
+	assetNumOfTrans, err := s.ReadAssetNumOfTrans(ctx, node, movieid)
+	if err != nil {
+		return 0, err
+	}
+
+	oldnumber := assetNumOfTrans.Number
+	assetNumOfTrans.Number = newNumber
+
+	assetJSON, err := json.Marshal(assetNumOfTrans)
+	if err != nil {
+		return 0, err
+	}
+
+	err = ctx.GetStub().PutState(key, assetJSON)
+	if err != nil {
+		return 0, err
+	}
+
+	return oldnumber, nil
+}
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	return nil
 }
@@ -581,6 +909,29 @@ func (s *SmartContract) PutAttribute(ctx contractapi.TransactionContextInterface
 		asset.Attrs = attrs
 		asset.TxType = "PutAttr"
 	}
+
+	assetAsBytes, _ := json.Marshal(asset)
+
+	_err := ctx.GetStub().PutState(id, assetAsBytes)
+
+	if _err != nil {
+		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
+	}
+
+	return asset, nil
+
+}
+
+func (s *SmartContract) SetAlert(ctx contractapi.TransactionContextInterface,
+	id string, alert bool) (*Asset, error) {
+	asset, err := s.QueryAsset(ctx, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	asset.Alert = alert
+	asset.TxType = "SetAlert"
 
 	assetAsBytes, _ := json.Marshal(asset)
 
